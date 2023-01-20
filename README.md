@@ -1,4 +1,4 @@
-# WebDev1
+# WebDev1 - Tic Tac Toe & Wordle
 
 ## Tic Tac Toe
 
