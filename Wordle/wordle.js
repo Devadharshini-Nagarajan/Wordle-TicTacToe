@@ -25,22 +25,17 @@ function initiateGame() {
   document.addEventListener("keyup", (e) => {
     let key = e.key;
     if (startGame) {
-      console.log(currentColumn);
       if (key === "Backspace" && currentColumn > 0) {
-        console.log("backspace");
         currentHistory[currentRow][currentColumn - 1] = "";
         currentColumn--;
       }
       if (key == "Enter" && currentColumn >= wordCount) {
-        console.log("enter");
         checkGameLogic();
       }
       if (currentColumn === wordCount) {
-        console.log("column end");
         return;
       }
       if (key.match(/^[a-zA-Z]+$/) && key.length === 1) {
-        console.log("key", key);
         // on key
         currentHistory[currentRow][currentColumn] = key;
         currentColumn++;
@@ -138,7 +133,7 @@ function getKeypadColor(letter) {
     if (fullString.includes(letter) && chosenWord.includes(letter))
       return "#6aaa64"; // green
     if (fullString.includes(letter) && !chosenWord.includes(letter))
-      return "#86888a"; // yellow
+      return "#86888a"; // dark grwy
   } else {
     return "lightgrey";
   }
@@ -187,7 +182,7 @@ function colorLogic() {
   for (i = 0; i <= word.length; i++) {
     if (finalArr[i] === "") {
       if (countWord[word[i]] < countChosenWord[word[i]]) {
-        finalArr[i] = "#86888a"; // yellow
+        finalArr[i] = "#ffc107"; // yellow
         countWord[word[i]] = countWord[word[i]] + 1;
       } else {
         finalArr[i] = "lightgrey";

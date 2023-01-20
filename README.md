@@ -11,11 +11,14 @@ It's a two player game. First user has to start the game to select the boxes and
 
 Using Reset Game button - user can start the game from scratch.
 
-History table on the left shows pints for each round
+History table on the right shows points for each round
 
 
 
 ## Wordle
+
+<img width="842" alt="image" src="https://user-images.githubusercontent.com/113491692/213813721-1164b57e-2a90-4379-8e09-3c027453284e.png">
+
 
 Functionality wise its complete. It  handles duplicate logic as well.
 
@@ -24,3 +27,4 @@ Yet to implement features:
 * Once game over backspace/enter should not work
 * Game History
 * Need to write few functions in more optimised way
+* Check entered word is a valid word or not
