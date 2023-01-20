@@ -2,7 +2,7 @@
 let history = [];
 let turn = "";
 let winner = "";
-let matchStatus = ""; // draw, win , continue
+let matchStatus = ""; // draw, win , ""
 let beginGame = false;
 
 let gridValue = [
@@ -15,6 +15,7 @@ let startGameButton = document.getElementById("startGame");
 let matchStatusDiv = document.getElementById("matchStatus");
 
 initiateGame();
+
 // functions
 function initiateGame() {
   turnSpan.innerHTML = "";
@@ -59,7 +60,6 @@ function checkGameLogic() {
       .join()
       .split(",")
       .every((el) => ["X", "O"].includes(el));
-    console.log(allHasValue, gridValue.join().split(""));
     const winCombos = [
       ["00", "01", "02"],
       ["10", "11", "12"],
@@ -111,7 +111,6 @@ function startGame() {
 function turnSwap() {
   if (turn === "X") turn = "O";
   else turn = "X";
-
   turnSpan.innerHTML = turn + "  Turn";
 }
 
