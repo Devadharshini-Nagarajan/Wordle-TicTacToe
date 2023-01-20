@@ -19,6 +19,9 @@ History table on the right shows points for each round
 
 <img width="595" alt="image" src="https://user-images.githubusercontent.com/113491692/213813994-75406880-0acc-4c1c-8c81-040e545b85bd.png">
 
+<img width="1059" alt="image" src="https://user-images.githubusercontent.com/113491692/213814172-1ea76262-324e-4be5-a7ce-9b4324b8651f.png">
+
+
 
 
 Functionality wise its complete. It  handles duplicate logic as well.
