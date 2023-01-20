@@ -17,7 +17,8 @@ History table on the right shows points for each round
 
 ## Wordle
 
-<img width="842" alt="image" src="https://user-images.githubusercontent.com/113491692/213813721-1164b57e-2a90-4379-8e09-3c027453284e.png">
+<img width="595" alt="image" src="https://user-images.githubusercontent.com/113491692/213813994-75406880-0acc-4c1c-8c81-040e545b85bd.png">
+
 
 
 Functionality wise its complete. It  handles duplicate logic as well.
