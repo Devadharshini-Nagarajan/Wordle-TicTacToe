@@ -53,3 +53,9 @@ h1 {
   cursor: pointer;
   text-transform: uppercase;
 }
+
+.flex-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

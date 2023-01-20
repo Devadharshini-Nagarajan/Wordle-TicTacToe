@@ -1,4 +1,4 @@
-let chosenWord = "arour";
+let chosenWord = "abbey";
 
 let guessesTotal = 6;
 let wordCount = 5;
@@ -13,13 +13,12 @@ let keyboardPattern = {
   "second-row": ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
   "third-row": ["Enter", "z", "x", "c", "v", "b", "n", "m", "Backspace"],
 };
-let currentHistoryColor = []
+let currentHistoryColor = [];
 
 initiateGame();
 
 function initiateGame() {
   currentHistory = setBaseForGame(guessesTotal, wordCount);
-  currentHistoryColor = setBaseForGame(guessesTotal, wordCount);
   updateUI();
   updateKeyboard();
 
@@ -53,20 +52,25 @@ function initiateGame() {
 
 function checkGameLogic() {
   if (currentHistory[currentRow].join("") === chosenWord) {
-    updateKeyboard();
-    alert("you found it");
-    resetGame();
+    updateBothSections()
+    setTimeout(() => alert("Hurray!!! You found the word " + chosenWord.toUpperCase()), 2000);
   } else {
     if (currentRow === guessesTotal - 1) {
-      alert("Game over");
-      resetGame();
+      alert("Oops! Game over");
+      updateBothSections()
       return;
     }
-    colorLogic();
+    updateBothSections()
     currentRow++;
     currentColumn = 0;
-    updateKeyboard();
   }
+}
+
+
+function updateBothSections() {
+  colorLogic();
+  updateKeyboard();
+  updateUI();
 }
 
 function onKeySelected(letterKey) {
@@ -132,78 +136,63 @@ function getKeypadColor(letter) {
   if (letter.length === 1) {
     let fullString = currentHistory.map((e) => e.join("")).join("");
     if (fullString.includes(letter) && chosenWord.includes(letter))
-      return "#6aaa64";
+      return "#6aaa64"; // green
     if (fullString.includes(letter) && !chosenWord.includes(letter))
-      return "#86888a";
+      return "#86888a"; // yellow
   } else {
     return "lightgrey";
   }
 }
 
 function getBoxColor(letter, index, rowIndex) {
-  if (letter && rowIndex < currentRow) {
-    if (!chosenWord.includes(letter)) {
-      // not founf
-      return "#86888a"; // gray
-    } else {
-      // letter found
-      let chosenWordinArr = [...chosenWord];
-      let isAtSameIndex = chosenWordinArr[index] === letter;
-      let counts = getCounts(chosenWordinArr);
-      for (const num of chosenWordinArr) {
-        counts[num] = counts[num] ? counts[num] + 1 : 1;
-      }
-      console.log('c',getCounts(currentHistory[rowIndex].join(''))[letter], getCounts(chosenWordinArr)[letter])
-      if (isAtSameIndex) {
-        return "#6aaa64"; // green
-      }
-        // else if(!isAtSameIndex && getCounts(currentHistory[rowIndex].join(''))[letter] <= getCounts(chosenWordinArr)[letter]) {
-        //   return "#6aaa64";  // green
-        // }
-      else return "#c9b458"; // yellow
+  if (letter && rowIndex <= currentRow) {
+    if(currentHistoryColor[rowIndex]) {
+      return currentHistoryColor[rowIndex][index];
     }
   }
 }
 
-function getCounts(arr) {
+function getCounts(arr, isInitial) {
   let counts = {};
   for (const num of arr) {
-    counts[num] = counts[num] ? counts[num] + 1 : 1;
+    counts[num] = isInitial ? 0 : counts[num] ? counts[num] + 1 : 1;
   }
   return counts;
 }
 
 function resetGame() {
   currentHistory = setBaseForGame(guessesTotal, wordCount);
+  currentHistoryColor = [];
   currentRow = 0;
   currentColumn = 0;
   updateKeyboard();
+  updateUI();
 }
-const countOccurrences = (arr, val) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
-function colorLogic() {
-    let answer = [];
-    let chosenWordinArr = [...chosenWord];
+const countOccurrences = (arr, val) =>
+  arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
 
-    // if(rowIndex < currentColumn) {
-        let word = currentHistory[currentRow];
-        let result = word.map((letter,i) => {
-            answer.push(letter);
-            let blockClass = 'blockGrey';
-            if(chosenWordinArr.includes(letter)) {
-                if(chosenWordinArr[i] === letter) {
-                    blockClass = ' blockGreen';
-                } else {
-                    if(countOccurrences(chosenWordinArr, letter) > 0) {
-                        if(countOccurrences(answer, letter) <= countOccurrences(chosenWordinArr,letter)){
-                            blockClass = ' blockGold';
-                        } else {
-                            blockClass = ' blockGrey';
-                        }
-                    }
-                }
-            } 
-            return blockClass;
-        })
-        console.log(result)
-    // }
+function colorLogic() {
+  let word = currentHistory[currentRow].join("");
+  let finalArr = ["", "", "", "", ""];
+  let countChosenWord = getCounts([...chosenWord], false);
+  let countWord = getCounts([...word], true);
+
+  for (i = 0; i <= word.length - 1; i++) {
+    if (chosenWord[i] === word[i]) {
+      finalArr[i] = "#6aaa64"; // green
+      countWord[word[i]] = countWord[word[i]] + 1;
+    }
+  }
+
+  for (i = 0; i <= word.length; i++) {
+    if (finalArr[i] === "") {
+      if (countWord[word[i]] < countChosenWord[word[i]]) {
+        finalArr[i] = "#86888a"; // yellow
+        countWord[word[i]] = countWord[word[i]] + 1;
+      } else {
+        finalArr[i] = "lightgrey";
+      }
+    }
+  }
+  currentHistoryColor.push(finalArr);
 }
