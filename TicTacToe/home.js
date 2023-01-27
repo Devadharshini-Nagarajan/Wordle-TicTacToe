@@ -15,6 +15,7 @@ let turnSpan = document.getElementById("whosTurn");
 let startGameButton = document.getElementById("startGame");
 let matchStatusDiv = document.getElementById("matchStatus");
 let offlineSpan = document.getElementById("offline");
+let resetBtn = document.getElementById("resetbtn");
 
 initiateGame();
 callAPILogic();
@@ -25,6 +26,7 @@ function initiateGame() {
   turnSpan.hidden = true;
   matchStatusDiv.innerHTML = "";
   startGameButton.hidden = false;
+  resetBtn.hidden = true;
   renderBlock();
 }
 
@@ -113,6 +115,7 @@ function startGame() {
   turnSpan.hidden = false;
   turnSpan.innerHTML = "X Turn";
   startGameButton.hidden = true;
+  resetBtn.hidden = false;
 }
 
 function turnSwap() {
