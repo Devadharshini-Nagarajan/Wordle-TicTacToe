@@ -4,13 +4,10 @@ var router = express.Router();
 let history = [];
 
 router.post("/grids", function (req, res, next) {
-  console.log("reqq devaa");
 
   let gridValue = req.body.data.gridValue;
   let turn = req.body.data.turn;
   let matchStatus = "";
-  let anyWon = false;
-  let anyDraw = false;
   if (gridValue && turn !== "") {
     let allHasValue = gridValue
       .join()
@@ -35,32 +32,24 @@ router.post("/grids", function (req, res, next) {
       ) {
         history.push(turn);
         matchStatus = turn + " won the game";
-        anyWon = true;
       }
     });
     if (!matchStatus) {
       if (allHasValue) {
         matchStatus = "Match draw";
         history.push("draw");
-        anyDraw = true;
       }
     }
     let finalsJson = {
       matchStatus: matchStatus,
-      history: history,
-      anyDraw: anyDraw,
-      anyWon: anyWon,
+      history: history
     };
-    console.log(finalsJson);
     res.json(finalsJson);
   } else {
     let finalsJson = {
       matchStatus: "",
-      history: history,
-      anyDraw: anyDraw,
-      anyWon: anyWon,
+      history: history
     };
-    console.log(finalsJson);
     res.json(finalsJson);
   }
 });

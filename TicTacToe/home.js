@@ -25,7 +25,6 @@ function initiateGame() {
   turnSpan.hidden = true;
   matchStatusDiv.innerHTML = "";
   startGameButton.hidden = false;
-  offlineSpan.innerHTML = "( Online )"
   renderBlock();
 }
 
