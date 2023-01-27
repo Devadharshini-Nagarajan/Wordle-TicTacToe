@@ -14,6 +14,7 @@ let gridValue = [
 let turnSpan = document.getElementById("whosTurn");
 let startGameButton = document.getElementById("startGame");
 let matchStatusDiv = document.getElementById("matchStatus");
+let offlineSpan = document.getElementById("offline");
 
 initiateGame();
 callAPILogic();
@@ -24,6 +25,7 @@ function initiateGame() {
   turnSpan.hidden = true;
   matchStatusDiv.innerHTML = "";
   startGameButton.hidden = false;
+  offlineSpan.innerHTML = "( Online )"
   renderBlock();
 }
 
@@ -177,6 +179,7 @@ function callAPILogic() {
     }
     if (xhttp.status === 0) {
       isOffline = true;
+      offlineSpan.innerHTML = "( Offline )"
       checkGameLogic();
     }
   };
