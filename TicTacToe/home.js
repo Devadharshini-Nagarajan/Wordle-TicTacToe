@@ -4,6 +4,7 @@ let turn = "";
 let winner = "";
 let matchStatus = ""; // draw, win , ""
 let beginGame = false;
+let isOffline = false;
 
 let gridValue = [
   ["", "", ""],
@@ -15,6 +16,7 @@ let startGameButton = document.getElementById("startGame");
 let matchStatusDiv = document.getElementById("matchStatus");
 
 initiateGame();
+callAPILogic();
 
 // functions
 function initiateGame() {
@@ -56,47 +58,51 @@ function onTdSelected(rowIndex, columnIndex) {
 
 function checkGameLogic() {
   if (!matchStatus) {
-    let allHasValue = gridValue
-      .join()
-      .split(",")
-      .every((el) => ["X", "O"].includes(el));
-    const winCombos = [
-      ["00", "01", "02"],
-      ["10", "11", "12"],
-      ["20", "21", "22"],
-      ["00", "10", "20"],
-      ["01", "11", "21"],
-      ["02", "12", "22"],
-      ["20", "11", "02"],
-      ["00", "11", "22"],
-    ];
+    if (isOffline) {
+      let allHasValue = gridValue
+        .join()
+        .split(",")
+        .every((el) => ["X", "O"].includes(el));
+      const winCombos = [
+        ["00", "01", "02"],
+        ["10", "11", "12"],
+        ["20", "21", "22"],
+        ["00", "10", "20"],
+        ["01", "11", "21"],
+        ["02", "12", "22"],
+        ["20", "11", "02"],
+        ["00", "11", "22"],
+      ];
 
-    winCombos.forEach((el) => {
-      if (
-        gridValue[el[0][0]][el[0][1]] === gridValue[el[1][0]][el[1][1]] &&
-        gridValue[el[1][0]][el[1][1]] === gridValue[el[2][0]][el[2][1]] &&
-        ["X", "O"].includes(gridValue[el[1][0]][el[1][1]])
-      ) {
-        history.push(turn);
-        matchStatus = turn + " won the game";
-        renderHistoryTable();
+      winCombos.forEach((el) => {
+        if (
+          gridValue[el[0][0]][el[0][1]] === gridValue[el[1][0]][el[1][1]] &&
+          gridValue[el[1][0]][el[1][1]] === gridValue[el[2][0]][el[2][1]] &&
+          ["X", "O"].includes(gridValue[el[1][0]][el[1][1]])
+        ) {
+          history.push(turn);
+          matchStatus = turn + " won the game";
+          renderHistoryTable();
+        }
+      });
+      if (!matchStatus) {
+        if (allHasValue) {
+          matchStatus = "Match draw";
+          history.push("draw");
+          renderHistoryTable();
+        }
       }
-    });
-    if (!matchStatus) {
-      matchStatus = allHasValue ? "Match draw" : "";
-      if (allHasValue) {
-        history.push("draw");
-        renderHistoryTable();
+      if (matchStatus === "") {
+        turnSwap();
+      } else {
+        turnSpan.innerHTML = "";
       }
-    }
-    if (matchStatus === "") {
-      turnSwap();
+
+      matchStatusDiv.innerHTML = matchStatus;
+      renderBlock();
     } else {
-      turnSpan.innerHTML = "";
+      callAPILogic();
     }
-
-    matchStatusDiv.innerHTML = matchStatus;
-    renderBlock();
   }
 }
 
@@ -148,4 +154,32 @@ function renderHistoryTable() {
   for (const num of history) {
     counts[num] = counts[num] ? counts[num] + 1 : 1;
   }
+}
+
+function callAPILogic() {
+  const xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "http://localhost:3000/grids", true);
+  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+  xhttp.onreadystatechange = function () {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      const res = JSON.parse(xhttp.responseText);
+      history = res.history;
+      matchStatus = res.matchStatus;
+      if (matchStatus === "") {
+        turnSwap();
+      } else {
+        turnSpan.innerHTML = "";
+      }
+      matchStatusDiv.innerHTML = matchStatus;
+      renderBlock();
+      renderHistoryTable();
+    }
+    if (xhttp.status === 0) {
+      isOffline = true;
+      checkGameLogic();
+    }
+  };
+
+  xhttp.send(JSON.stringify({ data: { gridValue: gridValue, turn: turn } }));
 }
