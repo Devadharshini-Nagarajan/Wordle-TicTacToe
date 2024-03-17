@@ -14,6 +14,9 @@ Using Reset Game button - user can start the game from scratch.
 
 History table on the right shows points for each round
 
+### Additional Feature:
+
+Offline and Online Support: If a backend server is available, upon every grid selection, the app makes an API call to the backend and fetches the result from there, storing the result.
 
 
 ## Wordle
